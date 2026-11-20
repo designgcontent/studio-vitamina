@@ -7,12 +7,12 @@
 @property --stage-color {
   syntax: "<color>";
   inherits: true;
-  initial-value: #b4d7ff;
+  initial-value: #b3d7ff;
 }
 @property --notice-paper {
   syntax: "<color>";
   inherits: true;
-  initial-value: #88f94f;
+  initial-value: #88fa4e;
 }
 @property --tide-x {
   syntax: "<number>";
@@ -21,11 +21,30 @@
 }
 
 :root {
-  --sky: #b4d7ff;
-  --lime: #88f94f;
+  --sky: #b3d7ff;
+  --pink: #ff42a1;
+  --lime: #88fa4e;
+  --lemon: #f4ff7d;
+  --lilac: #b7a6fc;
+  --turquoise: #16e7cf;
+  --orchid: #fe69e9;
+  --silver: #d5d5d5;
+  --brand-ink: #201b25;
   color: #000;
   background: white;
   font-family: "Century Gothic", "Avenir Next", sans-serif;
+}
+
+/* These four swatches use Display P3 in the reference PDF. */
+@media (color-gamut: p3) {
+  @supports (color: color(display-p3 1 1 1)) {
+    :root {
+      --sky: color(display-p3 .7294922 .8393555 .984375);
+      --lemon: color(display-p3 .9648438 1 .5605469);
+      --lilac: color(display-p3 .7060547 .6547852 .9648438);
+      --orchid: color(display-p3 .9252930 .4470215 .8901367);
+    }
+  }
 }
 
 * { box-sizing: border-box; }
@@ -167,8 +186,10 @@ button:focus-visible { outline: 2px solid #000; outline-offset: 3px; }
   min-height: 10rem;
   --stage-color: var(--sky);
   --notice-paper: var(--lime);
+  --accent-ink: color-mix(in srgb, var(--stage-color) 16%, #0c0812);
   background-color: var(--stage-color);
-  --colour-cycle: 24s;
+  --colour-step: 12s;
+  --colour-cycle: calc(8 * var(--colour-step));
   animation: brand-colours var(--colour-cycle) ease-in-out infinite;
 }
 .stage:has(.announcement:not([hidden])) {
@@ -182,10 +203,15 @@ button:focus-visible { outline: 2px solid #000; outline-offset: 3px; }
   place-items: center;
 }
 @keyframes brand-colours {
-  0%, 38%, 100% { --stage-color: var(--sky); --notice-paper: var(--lime); }
-  /* A pale lime midpoint keeps the panel distinct while both surfaces blend. */
-  44%, 94% { --notice-paper: color-mix(in srgb, var(--lime) 25%, white); }
-  50%, 88% { --stage-color: var(--lime); --notice-paper: var(--sky); }
+  /* Hold for 76% of each step, then blend both surfaces with the wave. */
+  0%, 9.5%, 100% { --stage-color: var(--sky); --notice-paper: var(--lime); }
+  12.5%, 22% { --stage-color: var(--pink); --notice-paper: var(--lilac); }
+  25%, 34.5% { --stage-color: var(--lime); --notice-paper: var(--sky); }
+  37.5%, 47% { --stage-color: var(--lemon); --notice-paper: var(--orchid); }
+  50%, 59.5% { --stage-color: var(--lilac); --notice-paper: var(--pink); }
+  62.5%, 72% { --stage-color: var(--turquoise); --notice-paper: var(--lemon); }
+  75%, 84.5% { --stage-color: var(--orchid); --notice-paper: var(--silver); }
+  87.5%, 97% { --stage-color: var(--silver); --notice-paper: var(--turquoise); }
 }
 .identity {
   position: relative;
@@ -260,7 +286,7 @@ button:focus-visible { outline: 2px solid #000; outline-offset: 3px; }
 }
 .announcement h2 { top: 12.5%; width: 90.1%; }
 .announcement h2 svg, .invitation img { display: block; width: 100%; height: auto; }
-.newsletter-ink { fill: var(--stage-color); }
+.newsletter-ink { fill: var(--accent-ink); }
 .newsletter-band { display: none; }
 @keyframes newsletter-wave {
   0%, 100% { transform: translateY(7px); }
@@ -269,7 +295,7 @@ button:focus-visible { outline: 2px solid #000; outline-offset: 3px; }
 @media (prefers-reduced-motion: no-preference) {
   .stage {
     animation: brand-colours var(--colour-cycle) ease-in-out infinite,
-               colour-tide calc(var(--colour-cycle) / 2) linear infinite;
+               colour-tide var(--colour-step) linear infinite;
     --tide-ink: color-mix(in srgb, var(--notice-paper) 45%, white);
   }
   .stage::before, .newsletter-band::before {
@@ -295,7 +321,6 @@ button:focus-visible { outline: 2px solid #000; outline-offset: 3px; }
     animation-delay: calc(-2.8s + var(--column) * .22s);
   }
 }
-/* The last 24% of each half-cycle is the existing colour crossfade. */
 @keyframes colour-tide {
   0%, 76% { --tide-x: -.45; }
   100% { --tide-x: 1.45; }
@@ -323,7 +348,7 @@ button:focus-visible { outline: 2px solid #000; outline-offset: 3px; }
   align-items: center;
   justify-content: space-between;
   padding-left: 3.1%;
-  background: #daebff;
+  background: color-mix(in srgb, var(--notice-paper) 26%, white);
   color: #334c67;
   font-size: clamp(.875rem, 2.8cqw, 1.6rem);
   letter-spacing: .035em;
