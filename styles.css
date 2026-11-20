@@ -14,6 +14,11 @@
   inherits: true;
   initial-value: #88fa4e;
 }
+@property --outline-opacity {
+  syntax: "<number>";
+  inherits: true;
+  initial-value: 0;
+}
 @property --tide-x {
   syntax: "<number>";
   inherits: true;
@@ -29,7 +34,6 @@
   --turquoise: #16e7cf;
   --orchid: #fe69e9;
   --silver: #d5d5d5;
-  --brand-ink: #201b25;
   color: #000;
   background: white;
   font-family: "Century Gothic", "Avenir Next", sans-serif;
@@ -206,9 +210,9 @@ button:focus-visible { outline: 2px solid #000; outline-offset: 3px; }
   /* Hold for 76% of each step, then blend both surfaces with the wave. */
   0%, 9.5%, 100% { --stage-color: var(--sky); --notice-paper: var(--lime); }
   12.5%, 22% { --stage-color: var(--pink); --notice-paper: var(--lilac); }
-  25%, 34.5% { --stage-color: var(--lime); --notice-paper: var(--sky); }
-  37.5%, 47% { --stage-color: var(--lemon); --notice-paper: var(--orchid); }
-  50%, 59.5% { --stage-color: var(--lilac); --notice-paper: var(--pink); }
+  25%, 34.5% { --stage-color: var(--lime); --notice-paper: var(--sky); --outline-opacity: 0; }
+  37.5%, 47% { --stage-color: var(--lemon); --notice-paper: var(--orchid); --outline-opacity: .48; }
+  50%, 59.5% { --stage-color: var(--lilac); --notice-paper: var(--pink); --outline-opacity: 0; }
   62.5%, 72% { --stage-color: var(--turquoise); --notice-paper: var(--lemon); }
   75%, 84.5% { --stage-color: var(--orchid); --notice-paper: var(--silver); }
   87.5%, 97% { --stage-color: var(--silver); --notice-paper: var(--turquoise); }
@@ -218,6 +222,7 @@ button:focus-visible { outline: 2px solid #000; outline-offset: 3px; }
   width: 71.25%;
 }
 .identity h1 {
+  filter: url(#wordmark-outline);
   display: grid;
   grid-template-columns: minmax(0, 398fr) minmax(0, 742fr);
   align-items: center;

@@ -50,9 +50,11 @@
             <svg class="word-studio" viewBox="0 0 398 110" aria-hidden="true" focusable="false">
               <defs>
                 <image id="wordmark-art" href="assets/studio-vitamina.svg" width="1140" height="110"/>
-                <filter id="wordmark-ink" color-interpolation-filters="sRGB">
-                  <feFlood flood-color="var(--brand-ink)"/>
-                  <feComposite in2="SourceAlpha" operator="in"/>
+                <filter id="wordmark-outline" color-interpolation-filters="sRGB">
+                  <feMorphology in="SourceAlpha" operator="dilate" radius="1" result="edge"/>
+                  <feFlood flood-color="black" flood-opacity="var(--outline-opacity, 0)"/>
+                  <feComposite in2="edge" operator="in"/>
+                  <feMerge><feMergeNode/><feMergeNode in="SourceGraphic"/></feMerge>
                 </filter>
                 <mask id="signature-ink" maskUnits="userSpaceOnUse" x="0" y="0" width="1140" height="110">
                   <use href="#wordmark-art"/>
@@ -66,7 +68,7 @@
                 C300 30 314 54 314 72 C314 37 368 37 368 72 C368 106 314 106 314 72
                 Q343 56 398 61.25"/>
               </defs>
-              <g class="wordmark-print" filter="url(#wordmark-ink)">
+              <g class="wordmark-print">
                 <svg x="0" width="54" height="110" viewBox="0 0 54 110" style="--glyph-x: .07"><use href="#wordmark-art"/></svg>
                 <svg x="54" width="60" height="110" viewBox="54 0 60 110" style="--glyph-x: .21"><use href="#wordmark-art"/></svg>
                 <svg x="114" width="70" height="110" viewBox="114 0 70 110" style="--glyph-x: .37"><use href="#wordmark-art"/></svg>
@@ -75,7 +77,7 @@
                 <svg x="300" width="98" height="110" viewBox="300 0 98 110" style="--glyph-x: .86"><use href="#wordmark-art"/></svg>
               </g>
               <g class="signature-writing" mask="url(#signature-ink)">
-                <use class="studio-trace" href="#studio-pen-route" fill="none" stroke="var(--brand-ink)" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"/>
+                <use class="studio-trace" href="#studio-pen-route" fill="none" stroke="white" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"/>
               </g>
             </svg>
             <svg class="word-vitamina" viewBox="398 0 742 110" aria-hidden="true" focusable="false">
@@ -84,12 +86,8 @@
                 <path id="press-blade" d="M-740 -70H15L-15 70H-740Z"/>
                 <clipPath id="ink-reveal"><use class="press-pass" href="#press-blade"/></clipPath>
                 <clipPath id="face-reveal"><use class="press-pass press-face" href="#press-blade"/></clipPath>
-                <filter id="press-ink" color-interpolation-filters="sRGB">
-                  <feFlood flood-color="var(--accent-ink)"/>
-                  <feComposite in2="SourceAlpha" operator="in"/>
-                </filter>
               </defs>
-              <g class="wordmark-print" filter="url(#wordmark-ink)">
+              <g class="wordmark-print">
                 <svg x="398" width="120" height="110" viewBox="398 0 120 110" style="--glyph-x: .10"><use href="#wordmark-art"/></svg>
                 <svg x="518" width="32" height="110" viewBox="518 0 32 110" style="--glyph-x: .18"><use href="#wordmark-art"/></svg>
                 <svg x="550" width="71" height="110" viewBox="550 0 71 110" style="--glyph-x: .25"><use href="#wordmark-art"/></svg>
@@ -101,8 +99,8 @@
                 <svg x="1060" width="80" height="110" viewBox="1060 0 80 110" style="--glyph-x: .94"><use href="#wordmark-art"/></svg>
               </g>
               <g class="signature-writing" clip-path="url(#capitals-area)">
-                <use href="#wordmark-art" filter="url(#press-ink)" clip-path="url(#ink-reveal)"/>
-                <use href="#wordmark-art" filter="url(#wordmark-ink)" clip-path="url(#face-reveal)"/>
+                <use href="#wordmark-art" opacity=".5" clip-path="url(#ink-reveal)"/>
+                <use href="#wordmark-art" clip-path="url(#face-reveal)"/>
               </g>
             </svg>
           </h1>
