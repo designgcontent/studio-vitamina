@@ -211,7 +211,7 @@ button:focus-visible { outline: 2px solid #000; outline-offset: 3px; }
   0%, 9.5%, 100% { --stage-color: var(--sky); --notice-paper: var(--lime); }
   12.5%, 22% { --stage-color: var(--pink); --notice-paper: var(--lilac); }
   25%, 34.5% { --stage-color: var(--lime); --notice-paper: var(--sky); --outline-opacity: 0; }
-  36.5%, 47% { --outline-opacity: .64; }
+  36.5%, 47% { --outline-opacity: .27; }
   37.5%, 47% { --stage-color: var(--lemon); --notice-paper: var(--orchid); }
   50%, 59.5% { --stage-color: var(--lilac); --notice-paper: var(--pink); --outline-opacity: 0; }
   62.5%, 72% { --stage-color: var(--turquoise); --notice-paper: var(--lemon); }
@@ -231,7 +231,7 @@ button:focus-visible { outline: 2px solid #000; outline-offset: 3px; }
 .wordmark-print, .word-vitamina .signature-writing {
   stroke: black;
   stroke-opacity: var(--outline-opacity, 0);
-  stroke-width: 3;
+  stroke-width: 1.6;
   stroke-linejoin: round;
   paint-order: stroke fill;
 }
@@ -421,7 +421,7 @@ button:focus-visible { outline: 2px solid #000; outline-offset: 3px; }
     grid-template-rows: minmax(.6rem, 1fr) auto auto minmax(.6rem, 1fr) minmax(min-content, var(--band-height));
   }
   .identity { width: min(79%, 30rem); container-type: inline-size; }
-  .wordmark-print, .word-vitamina .signature-writing { stroke-width: 4.7; }
+  .wordmark-print, .word-vitamina .signature-writing { stroke-width: 2.6; }
   .identity h1 { grid-template-columns: minmax(0, 1fr); justify-items: center; gap: 0; }
   .identity h1 .word-studio { width: 62%; }
   .word-studio, .word-vitamina { grid-area: auto; --ripple-height: 3px; }
