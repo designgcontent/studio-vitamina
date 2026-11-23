@@ -16,7 +16,7 @@
     root.classList.toggle("entry-paused", document.hidden || document.readyState !== "complete");
   }
 
-  // All three marks share a clock that starts once the loaded page is visible.
+  // The collective intro starts once the loaded page is visible.
   syncEntrance();
   root.classList.add("entry-active");
   window.addEventListener("load", syncEntrance, { once: true });

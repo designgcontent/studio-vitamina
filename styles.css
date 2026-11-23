@@ -1,6 +1,12 @@
 @font-face {
   font-family: "Vitamina Contact";
-  src: url("assets/contacto.woff2") format("woff2");
+  src: url("assets/contacto.woff2?v=web-ok") format("woff2");
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Vitamina Aviso";
+  src: url("assets/aviso.woff2") format("woff2");
   font-display: swap;
 }
 
@@ -9,7 +15,7 @@
   inherits: true;
   initial-value: #b3d7ff;
 }
-@property --notice-paper {
+@property --wordmark-color {
   syntax: "<color>";
   inherits: true;
   initial-value: #88fa4e;
@@ -26,29 +32,9 @@
 }
 
 :root {
-  --sky: #b3d7ff;
-  --pink: #ff42a1;
-  --lime: #88fa4e;
-  --lemon: #f4ff7d;
-  --lilac: #b7a6fc;
-  --turquoise: #16e7cf;
-  --orchid: #fe69e9;
-  --silver: #d5d5d5;
   color: #000;
   background: white;
   font-family: "Century Gothic", "Avenir Next", sans-serif;
-}
-
-/* These four swatches use Display P3 in the reference PDF. */
-@media (color-gamut: p3) {
-  @supports (color: color(display-p3 1 1 1)) {
-    :root {
-      --sky: color(display-p3 .7294922 .8393555 .984375);
-      --lemon: color(display-p3 .9648438 1 .5605469);
-      --lilac: color(display-p3 .7060547 .6547852 .9648438);
-      --orchid: color(display-p3 .9252930 .4470215 .8901367);
-    }
-  }
 }
 
 * { box-sizing: border-box; }
@@ -74,7 +60,7 @@ button:focus-visible { outline: 2px solid #000; outline-offset: 3px; }
 }
 
 .collective { display: block; height: auto; width: clamp(7.75rem, 10.8vw, 12rem); }
-.brand-intro, .signature-writing { display: none; }
+.brand-intro { display: none; }
 .entry-active {
   --intro-hold: 1.22s;
   --intro-fade: .26s;
@@ -114,31 +100,9 @@ button:focus-visible { outline: 2px solid #000; outline-offset: 3px; }
   .entry-active .masthead-letters {
     animation: reveal-name .42s calc(var(--landing-start) + .1s) ease-out both;
   }
-  .entry-active .identity {
-    --pen-time: .82s;
-    --pen-ease: cubic-bezier(.28,.03,.47,.97);
-    --press-start: calc(var(--landing-start) + var(--pen-time));
-    --press-time: .52s;
-    --signature-end: calc(var(--press-start) + var(--press-time) + .14s);
-  }
-  .entry-active .signature-writing {
-    display: inline;
-    pointer-events: none;
-    animation: put-away-pen .06s var(--signature-end) linear forwards;
-  }
-  .entry-active .wordmark-print {
-    animation: show-print .06s calc(var(--signature-end) - .06s) linear backwards;
-  }
-  .studio-trace {
-    stroke-dasharray: 1 1;
-    animation: draw-studio var(--pen-time) var(--landing-start) var(--pen-ease) both;
-  }
-  .press-pass {
-    animation: print-capitals var(--press-time) var(--press-start) cubic-bezier(.36,.02,.19,1) both;
-  }
-  .press-face { animation-delay: calc(var(--press-start) + .075s); }
+
 }
-.entry-paused :is(.brand-intro, .intro-art *, .collective use, .wordmark-print, .signature-writing, .signature-writing *, .press-pass) {
+.entry-paused :is(.brand-intro, .intro-art *, .collective use) {
   animation-play-state: paused;
 }
 /* 126 is the artwork's midpoint. The cross is centred at x = 39.8. */
@@ -163,24 +127,6 @@ button:focus-visible { outline: 2px solid #000; outline-offset: 3px; }
   from { transform: rotate(-65deg) scale(1.35); }
   to { transform: none; }
 }
-@keyframes draw-studio {
-  from { stroke-dashoffset: 1; opacity: 0; }
-  2% { opacity: 1; }
-  to { stroke-dashoffset: 0; opacity: 1; }
-}
-@keyframes print-capitals {
-  from { transform: translate(398px, 61.25px); }
-  to { transform: translate(1097.3px, 61.25px); }
-}
-@keyframes show-print {
-  from { opacity: 0; }
-  to { opacity: 1; }
-}
-@keyframes put-away-pen {
-  from { opacity: 1; visibility: visible; }
-  to { opacity: 0; visibility: hidden; }
-}
-
 .stage {
   display: grid;
   grid-template-columns: minmax(0, 1fr);
@@ -188,13 +134,10 @@ button:focus-visible { outline: 2px solid #000; outline-offset: 3px; }
   position: relative;
   isolation: isolate;
   min-height: 10rem;
-  --stage-color: var(--sky);
-  --notice-paper: var(--lime);
-  --accent-ink: color-mix(in srgb, var(--stage-color) 16%, #0c0812);
+  --stage-color: #b3d7ff;
+  --wordmark-color: #88fa4e;
+  --outline-opacity: .27;
   background-color: var(--stage-color);
-  --colour-step: 12s;
-  --colour-cycle: calc(8 * var(--colour-step));
-  animation: brand-colours var(--colour-cycle) ease-in-out infinite;
 }
 .stage:has(.announcement:not([hidden])) {
   grid-template-areas: "." "brand" "notice" ".";
@@ -206,18 +149,6 @@ button:focus-visible { outline: 2px solid #000; outline-offset: 3px; }
   display: grid;
   place-items: center;
 }
-@keyframes brand-colours {
-  /* Hold for 76% of each step, then blend both surfaces with the wave. */
-  0%, 9.5%, 100% { --stage-color: var(--sky); --notice-paper: var(--lime); }
-  12.5%, 22% { --stage-color: var(--pink); --notice-paper: var(--lilac); }
-  25%, 34.5% { --stage-color: var(--lime); --notice-paper: var(--sky); --outline-opacity: 0; }
-  36.5%, 47% { --outline-opacity: .27; }
-  37.5%, 47% { --stage-color: var(--lemon); --notice-paper: var(--orchid); }
-  50%, 59.5% { --stage-color: var(--lilac); --notice-paper: var(--pink); --outline-opacity: 0; }
-  62.5%, 72% { --stage-color: var(--turquoise); --notice-paper: var(--lemon); }
-  75%, 84.5% { --stage-color: var(--orchid); --notice-paper: var(--silver); }
-  87.5%, 97% { --stage-color: var(--silver); --notice-paper: var(--turquoise); }
-}
 .identity {
   position: relative;
   width: 71.25%;
@@ -227,16 +158,20 @@ button:focus-visible { outline: 2px solid #000; outline-offset: 3px; }
   grid-template-columns: minmax(0, 398fr) minmax(0, 742fr);
   align-items: center;
 }
-.identity h1 > svg { display: block; width: 100%; height: auto; overflow: hidden; }
-.wordmark-print, .word-vitamina .signature-writing {
+.identity h1 > svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  overflow: hidden;
+  fill: var(--wordmark-color);
   stroke: black;
   stroke-opacity: var(--outline-opacity, 0);
   stroke-width: 1.6;
   stroke-linejoin: round;
   paint-order: stroke fill;
 }
-.word-studio { grid-area: 1 / 1; --word-left: .144; --word-width: .249; }
-.word-vitamina { grid-area: 1 / 2; --word-left: .393; --word-width: .464; }
+.word-studio { grid-area: 1 / 1; }
+.word-vitamina { grid-area: 1 / 2; }
 .news-trigger {
   position: absolute;
   -webkit-tap-highlight-color: transparent;
@@ -257,18 +192,15 @@ button:focus-visible { outline: 2px solid #000; outline-offset: 3px; }
   font-family: "Vitamina Contact", "Century Gothic", sans-serif;
   font-size: clamp(.875rem, 1vw, 1.0625rem);
   line-height: 1.3;
+  letter-spacing: .045em;
 }
 .contact address {
   display: flex;
   align-items: center;
   justify-content: center;
   flex-wrap: wrap;
-  gap: .45rem clamp(2rem, 5.8vw, 7.5rem);
+  gap: .45rem clamp(.85rem, 1.8vw, 2.7rem);
   font-style: normal;
-}
-.contact .person {
-  display: inline-flex;
-  gap: clamp(.65rem, 1.1vw, 1.25rem);
 }
 .contact span { white-space: nowrap; }
 .email {
@@ -288,7 +220,7 @@ button:focus-visible { outline: 2px solid #000; outline-offset: 3px; }
   aspect-ratio: 724 / 484;
   --panel-border: clamp(2px, .18vw, 3px);
   border: var(--panel-border) solid #000;
-  background-color: var(--notice-paper);
+  background-color: #d5d5d5;
   container-type: inline-size;
 }
 .announcement h2, .invitation, .notice {
@@ -297,20 +229,19 @@ button:focus-visible { outline: 2px solid #000; outline-offset: 3px; }
   transform: translateX(-50%);
 }
 .announcement h2 { top: 12.5%; width: 90.1%; }
-.announcement h2 svg, .invitation img { display: block; width: 100%; height: auto; }
-.newsletter-ink { fill: var(--accent-ink); }
+.announcement h2 svg { display: block; width: 100%; height: auto; }
+.announcement .newsletter-ink { fill: #000; }
 .newsletter-band { display: none; }
 @keyframes newsletter-wave {
   0%, 100% { transform: translateY(7px); }
   50% { transform: translateY(-7px); }
 }
 @media (prefers-reduced-motion: no-preference) {
-  .stage {
-    animation: brand-colours var(--colour-cycle) ease-in-out infinite,
-               colour-tide var(--colour-step) linear infinite;
-    --tide-ink: color-mix(in srgb, var(--notice-paper) 45%, white);
+  .stage.wash-running {
+    animation: colour-tide 12s linear infinite;
+    --tide-ink: color-mix(in srgb, var(--wordmark-color) 45%, white);
   }
-  .stage::before, .newsletter-band::before {
+  .wash-running::before, .wash-running .newsletter-band::before {
     content: "";
     position: absolute;
     inset: 0;
@@ -322,7 +253,7 @@ button:focus-visible { outline: 2px solid #000; outline-offset: 3px; }
     background-size: 65% 100%;
     background-position-x: calc((var(--tide-x) - .36) * 285.714%);
   }
-  .wordmark-print > svg, .wave-lettering > use {
+  .wash-running .wave-lettering > use {
     --letter-at: calc(var(--word-left) + var(--glyph-x) * var(--word-width));
     --phase: clamp(0, calc((var(--tide-x) - var(--letter-at)) * 2.7 + .5), 1);
     translate: 0 calc(-1 * var(--ripple-height, 1.8px) * sin(var(--phase) * 1turn) * sin(var(--phase) * .5turn));
@@ -337,7 +268,13 @@ button:focus-visible { outline: 2px solid #000; outline-offset: 3px; }
   0%, 76% { --tide-x: -.45; }
   100% { --tide-x: 1.45; }
 }
-.invitation { top: 51%; width: 48.2%; }
+.invitation {
+  top: 51%;
+  width: 90%;
+  color: #000;
+  text-align: center;
+  font: clamp(.875rem, 4cqw, 1.5rem)/1.15 "Vitamina Aviso", sans-serif;
+}
 .dismiss {
   position: absolute;
   top: -1px;
@@ -354,23 +291,32 @@ button:focus-visible { outline: 2px solid #000; outline-offset: 3px; }
 .dismiss:focus-visible { outline-offset: -5px; }
 .notice {
   top: 71.15%;
-  width: 65.7%;
+  width: 72%;
   min-height: max(13.25%, 44px);
   display: flex;
   align-items: center;
   justify-content: space-between;
   padding-left: 3.1%;
-  background: color-mix(in srgb, var(--notice-paper) 26%, white);
-  color: #334c67;
-  font-size: clamp(.875rem, 2.8cqw, 1.6rem);
-  letter-spacing: .035em;
+  gap: .35rem;
+  background: #dedede;
+  color: white;
+  font: clamp(.75rem, 2.85cqw, 1rem)/1.25 "Vitamina Contact", sans-serif;
+}
+.notice span {
+  min-width: 0;
+  overflow-wrap: anywhere;
+  font-weight: 600;
+  -webkit-text-stroke: .9px rgb(0 0 0 / .53);
+  paint-order: stroke fill;
+  text-shadow: 0 .7px .9px rgb(0 0 0 / .45);
 }
 .acknowledge {
   align-self: stretch;
   min-width: 44px;
   min-height: 44px;
   padding-inline: 3.4%;
-  font-size: 1.35em;
+  font: 1.35em "Vitamina Aviso", sans-serif;
+  color: #575757;
 }
 @media (hover: hover) {
   .dismiss:hover { background: #000; color: white; }
@@ -421,12 +367,10 @@ button:focus-visible { outline: 2px solid #000; outline-offset: 3px; }
     grid-template-rows: minmax(.6rem, 1fr) auto auto minmax(.6rem, 1fr) minmax(min-content, var(--band-height));
   }
   .identity { width: min(79%, 30rem); container-type: inline-size; }
-  .wordmark-print, .word-vitamina .signature-writing { stroke-width: 2.6; }
+  .identity h1 > svg { stroke-width: 2.6; }
   .identity h1 { grid-template-columns: minmax(0, 1fr); justify-items: center; gap: 0; }
   .identity h1 .word-studio { width: 62%; }
-  .word-studio, .word-vitamina { grid-area: auto; --ripple-height: 3px; }
-  .word-studio { --word-left: .255; --word-width: .49; }
-  .word-vitamina { --word-left: .105; --word-width: .79; }
+  .word-studio, .word-vitamina { grid-area: auto; }
   .news-trigger {
     right: 1.5%;
     left: auto;
@@ -444,7 +388,7 @@ button:focus-visible { outline: 2px solid #000; outline-offset: 3px; }
     place-items: center;
     min-height: var(--band-height);
     padding: 1rem max(1rem, env(safe-area-inset-left), env(safe-area-inset-right));
-    background-color: var(--notice-paper);
+    background-color: var(--wordmark-color);
     --tide-ink: color-mix(in srgb, var(--stage-color) 45%, white);
     --word-left: .23;
     --word-width: .54;
@@ -452,7 +396,10 @@ button:focus-visible { outline: 2px solid #000; outline-offset: 3px; }
   }
   .stage:has(.announcement:not([hidden])) .newsletter-band { min-height: auto; }
   .newsletter-band > svg { display: block; width: min(54vw, 20rem); }
-  .wave-lettering { filter: drop-shadow(-6px 6px 0 #fff); }
+  .wave-lettering {
+    fill: color-mix(in srgb, var(--stage-color) 16%, #0c0812);
+    filter: drop-shadow(-6px 6px 0 #fff);
+  }
   .announcement {
     margin-top: clamp(1.75rem, 6svh, 3.75rem);
     width: min(84%, 19rem);
@@ -468,14 +415,14 @@ button:focus-visible { outline: 2px solid #000; outline-offset: 3px; }
   }
   .announcement h2 { width: 100%; }
   .announcement .dismiss { inset: 0 0 auto auto; }
-  .announcement .invitation { width: 66%; margin-top: clamp(.5rem, 1.75svh, 1.1rem); }
+  .announcement .invitation { width: 100%; margin-top: clamp(.5rem, 1.75svh, 1.1rem); }
   .announcement .notice {
     width: 100%;
     margin-top: clamp(.5rem, 1.75svh, 1.1rem);
     min-height: 44px;
     padding-left: .8rem;
     gap: .4rem;
-    font-size: .875rem;
+    font-size: clamp(.8125rem, 5cqw, .875rem);
   }
   .contact {
     padding: .9rem max(6%, env(safe-area-inset-right)) max(.9rem, env(safe-area-inset-bottom)) max(6%, env(safe-area-inset-left));
@@ -487,12 +434,11 @@ button:focus-visible { outline: 2px solid #000; outline-offset: 3px; }
     width: min(100%, 34rem);
     gap: .35rem;
   }
-  .contact-label { color: #d4d4d4; font-size: .875rem; }
-  .contact .person {
-    justify-content: space-between;
-    flex-wrap: wrap;
-    gap: .25rem 1rem;
-    margin-bottom: .3rem;
+  .contact .person { font-size: 1.05rem; }
+  .contact .role {
+    white-space: normal;
+    font-size: .79rem;
+    margin-bottom: .2rem;
   }
   .contact .email { white-space: normal; overflow-wrap: anywhere; }
 }
@@ -531,5 +477,5 @@ button:focus-visible { outline: 2px solid #000; outline-offset: 3px; }
 }
 @media (prefers-reduced-motion: reduce) {
   .entry-active { --intro-hold: .55s; --intro-fade: .1s; }
-  .stage, .announcement { animation: none; }
+
 }
